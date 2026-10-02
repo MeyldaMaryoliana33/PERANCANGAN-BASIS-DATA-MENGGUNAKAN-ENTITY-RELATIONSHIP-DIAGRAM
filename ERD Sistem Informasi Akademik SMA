@@ -1,0 +1,35 @@
+# ERD Sistem Informasi Akademik SMA (Praktikum Terbimbing)
+
+## Studi Kasus
+SMA Harapan Bangsa memiliki siswa dan guru. Setiap siswa ditempatkan pada satu kelas.
+Pembelajaran diatur melalui jadwal pelajaran (kelas, mata pelajaran, guru, hari, waktu).
+Setelah mengikuti pembelajaran, siswa memperoleh nilai.
+
+## Entitas, Atribut, dan Identifier
+
+| No | Entitas | Atribut | Identifier (PK) |
+|----|---------|---------|-----------------|
+| 1 | SISWA | nisn, nama_siswa, jenis_kelamin, tanggal_lahir, alamat | nisn |
+| 2 | GURU | kode_guru, nip_nuptk, nama_guru, jenis_kelamin, no_telepon, alamat | kode_guru |
+| 3 | KELAS | kode_kelas, nama_kelas, tingkat, tahun_ajaran | kode_kelas |
+| 4 | MATA_PELAJARAN | kode_mapel, nama_mapel | kode_mapel |
+| 5 | JADWAL_PELAJARAN | kode_jadwal, hari, jam_mulai, jam_selesai, ruang | kode_jadwal |
+| 6 | NILAI | id_nilai, nilai_tugas, nilai_uts, nilai_uas, nilai_akhir, semester | id_nilai |
+
+> Catatan: pada tabel modul, identifier `NILAI` tertulis `nilai_tugas`. Itu bukan
+> identifier yang baik karena nilainya bisa sama untuk banyak data. Di sini ditambahkan
+> `id_nilai` sebagai identifier.
+
+## Relationship dan Kardinalitas
+
+| No | Entitas A | Relationship | Entitas B | Kardinalitas |
+|----|-----------|--------------|-----------|--------------|
+| 1 | KELAS | memiliki | SISWA | 1 : N |
+| 2 | KELAS | memiliki | JADWAL_PELAJARAN | 1 : N |
+| 3 | GURU | mengajar | JADWAL_PELAJARAN | 1 : N |
+| 4 | MATA_PELAJARAN | diajarkan | JADWAL_PELAJARAN | 1 : N |
+| 5 | SISWA | memperoleh | NILAI | 1 : N |
+| 6 | MATA_PELAJARAN | mempunyai | NILAI | 1 : N |
+
+`NILAI` berperan sebagai entitas penghubung antara `SISWA` dan `MATA_PELAJARAN`
+(hubungan M : N diselesaikan menjadi dua hubungan 1 : N).
