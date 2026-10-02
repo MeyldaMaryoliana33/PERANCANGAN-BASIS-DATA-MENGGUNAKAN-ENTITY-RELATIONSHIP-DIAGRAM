@@ -1,0 +1,16 @@
+# Entity Relationship Diagram 
+
+Entity Relationship Diagram (ERD) merupakan model visual yang 
+digunakan untuk menggambarkan struktur data serta hubungan antarobjek 
+dalam suatu sistem. 
+ERD umumnya memuat: 
+a. entity; 
+b. attribute; 
+c. identifier; 
+d. relationship; 
+e. cardinality. 
+Alur pengembangan basis data secara sederhana adalah: 
+Kebutuhan 
+Sistem 
+Analisis Data 
+ERD 
