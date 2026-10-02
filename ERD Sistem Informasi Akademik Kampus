@@ -1,0 +1,77 @@
+# ERD Sistem Informasi Akademik Kampus (Tugas Praktikum)
+
+## 1. Analisis Kebutuhan
+
+Kata benda utama dari studi kasus: perguruan tinggi, program studi, mahasiswa, dosen,
+mata kuliah, semester/tahun akademik, kelas kuliah, KRS, nilai.
+
+Syarat sebuah objek menjadi entitas: informasinya perlu disimpan, punya atribut,
+dapat dibedakan dari objek lain, dan berperan dalam proses sistem.
+
+| Kandidat | Keputusan | Alasan |
+|----------|-----------|--------|
+| Perguruan tinggi | Bukan entitas | Hanya satu institusi, tidak perlu disimpan sebagai data |
+| Program studi | Entitas | Punya kode, nama, dan banyak mahasiswa/dosen |
+| Mahasiswa | Entitas | Data utama sistem |
+| Dosen | Entitas | Mengampu kelas kuliah |
+| Mata kuliah | Entitas | Punya kode, nama, SKS |
+| Semester/Tahun akademik | Entitas (`SEMESTER`) | Dipakai berulang oleh banyak kelas kuliah, mencegah pengulangan data |
+| Kelas kuliah | Entitas | Pelaksanaan mata kuliah pada semester tertentu oleh satu dosen |
+| KRS | Entitas penghubung | Menyelesaikan M:N mahasiswa dan kelas kuliah |
+| Nilai | Entitas | Hasil penilaian per mahasiswa pada kelas kuliah |
+
+Entitas tambahan di luar contoh modul: **`SEMESTER`**, karena sistem harus mencatat
+semester dan tahun akademik. Jika ditulis langsung di tiap kelas kuliah, data yang sama
+akan berulang.
+
+## 2. Entitas, Atribut, dan Identifier
+
+| No | Entitas | Atribut | Identifier |
+|----|---------|---------|------------|
+| 1 | PROGRAM_STUDI | kode_prodi, nama_prodi, jenjang | kode_prodi |
+| 2 | MAHASISWA | nim, nama_mahasiswa, jenis_kelamin, tanggal_lahir, alamat, tahun_angkatan, email, kode_prodi (FK) | nim |
+| 3 | DOSEN | nidn, nama_dosen, jenis_kelamin, no_telepon, email, kode_prodi (FK) | nidn |
+| 4 | MATA_KULIAH | kode_mk, nama_mk, sks, kode_prodi (FK) | kode_mk |
+| 5 | SEMESTER | id_semester, tahun_akademik, jenis_semester | id_semester |
+| 6 | KELAS_KULIAH | kode_kelas, nama_kelas, ruang, hari, jam_mulai, jam_selesai, kode_mk (FK), id_semester (FK), nidn (FK) | kode_kelas |
+| 7 | KRS | id_krs, tanggal_pengisian, status, nim (FK), kode_kelas (FK) | id_krs |
+| 8 | NILAI | id_nilai, nilai_angka, nilai_huruf, id_krs (FK) | id_nilai |
+
+`jenis_semester` bernilai Ganjil/Genap. Atribut turunan (derived) yang tidak disimpan:
+`usia` (dari tanggal_lahir).
+
+> Atribut FK ditulis agar relasi jelas saat dipindah ke tabel di Modul 3.
+> Pada ERD konseptual di draw.io, FK boleh tidak digambar sebagai atribut karena sudah
+> diwakili oleh garis relationship.
+
+## 3. Relationship dan Kardinalitas
+
+| No | Entitas A | Relationship | Entitas B | Kardinalitas | Penjelasan |
+|----|-----------|--------------|-----------|--------------|------------|
+| 1 | PROGRAM_STUDI | memiliki | MAHASISWA | 1 : N | Mahasiswa terdaftar pada satu prodi |
+| 2 | PROGRAM_STUDI | memiliki | DOSEN | 1 : N | Dosen bernaung pada satu prodi |
+| 3 | PROGRAM_STUDI | menawarkan | MATA_KULIAH | 1 : N | Prodi menawarkan sejumlah mata kuliah |
+| 4 | MATA_KULIAH | dibuka_dalam | KELAS_KULIAH | 1 : N | Satu mata kuliah dapat dibuka di beberapa kelas |
+| 5 | SEMESTER | berlangsung_pada | KELAS_KULIAH | 1 : N | Satu semester berisi banyak kelas kuliah |
+| 6 | DOSEN | mengampu | KELAS_KULIAH | 1 : N | Satu kelas diampu satu dosen, dosen bisa banyak kelas |
+| 7 | MAHASISWA | mengisi | KRS | 1 : N | Mahasiswa dapat mengambil banyak kelas |
+| 8 | KELAS_KULIAH | diikuti_melalui | KRS | 1 : N | Satu kelas dapat diikuti banyak mahasiswa |
+| 9 | KRS | menghasilkan | NILAI | 1 : 1 | Satu pengambilan kelas menghasilkan satu nilai |
+
+## 4. Hubungan Many-to-Many dan Penyelesaiannya
+
+| M : N yang ditemukan | Entitas penghubung | Hasil |
+|----------------------|--------------------|-------|
+| MAHASISWA M : N KELAS_KULIAH (mengambil kelas) | `KRS` | MAHASISWA 1:N KRS dan KELAS_KULIAH 1:N KRS |
+| MAHASISWA M : N KELAS_KULIAH (memperoleh nilai) | `NILAI` melekat pada `KRS` | KRS 1:1 NILAI, nilai selalu terkait pasangan mahasiswa + kelas |
+
+Semester dan tahun akademik pengambilan KRS diperoleh dari `KELAS_KULIAH → SEMESTER`,
+sehingga tidak perlu disimpan ulang di `KRS`.
+
+Aturan tambahan: pasangan (`nim`, `kode_kelas`) di `KRS` harus unik agar mahasiswa tidak
+mengambil kelas yang sama dua kali.
+- [x] Setiap entitas punya identifier jelas
+- [x] Semua relationship diberi kardinalitas
+- [x] Many-to-many dianalisis dan diselesaikan (`KRS`)
+- [x] Menggunakan Crow's Foot Notation
+- [ ] Gambar di draw.io rapi, connector tidak berlebihan berpotongan (cek manual)
