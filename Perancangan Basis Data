@@ -1,0 +1,21 @@
+# Perancangan Basis Data 
+
+Perancangan basis data merupakan proses menentukan struktur data yang 
+diperlukan untuk mendukung kebutuhan suatu sistem informasi. 
+Sebelum database dibuat, pengembang perlu mengetahui: 
+a. data apa yang dibutuhkan; 
+b. objek apa saja yang datanya perlu disimpan; 
+c. karakteristik setiap objek; 
+d. bagaimana hubungan antarobjek; 
+e. aturan yang berlaku pada data tersebut. 
+Sebagai contoh, sebuah Sistem Informasi Akademik SMA membutuhkan 
+informasi mengenai: 
+a. siswa; 
+b. guru; 
+c. kelas; 
+d. mata pelajaran; 
+e. jadwal pembelajaran; 
+f. nilai. 
+Apabila data tersebut langsung dibuat tanpa perancangan yang baik, dapat 
+terjadi pengulangan data, kesulitan melakukan perubahan, serta hubungan antar
+data yang tidak konsisten. 
